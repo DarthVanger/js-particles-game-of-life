@@ -17,3 +17,18 @@ export function createParticle() {
 
   return particle
 }
+
+export function updateParticle(particle) {
+  particle.x += particle.vx
+  particle.y += particle.vy
+
+  handleEdges(particle)
+}
+
+function handleEdges(particle) {
+  const isRightEdge = particle.x + particle.r > canvas.width
+  if (isRightEdge) {
+    //createVirtualParticle(particle)
+    particle.x = 0 - particle.r
+  }
+}
