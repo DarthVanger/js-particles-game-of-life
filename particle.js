@@ -8,8 +8,10 @@ export function drawParticle (particle) {
 
 export function createParticle() {
   const particle = {
-    x: canvas.width / 2,
+    x: 0,
     y: canvas.height / 2,
+    vx: 10,
+    vy: 0,
     r: 50,
   }
 
