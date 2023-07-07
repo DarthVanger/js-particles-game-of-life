@@ -13,7 +13,7 @@ export function applyForce() {
 }
 
 function applyFriction() {
-  const frictionConstant = 0.95
+  const frictionConstant = 0.97
   const { particles } = state;
   for (const particle of particles) {
     particle.vx = particle.vx * frictionConstant
@@ -27,11 +27,11 @@ function applyParticleForce(p1, p2) {
 
 function universalPushForce(p1, p2) {
   if (p1 === p2) return;
-  const forceConstant = 1
+  const forceConstant = 10
   const distX = p2.x - p1.x
   const distY = p2.y - p1.y
   const dist = Math.sqrt(distX * distX + distY * distY)
-  if (dist > universalPushForceRange) return;
+  if (dist > universalPushForceRange * 2) return;
 
   const forceX = (distX / dist) * forceConstant / dist
   const forceY = (distY / dist) * forceConstant / dist
@@ -47,7 +47,8 @@ export function renderForceCircles() {
 }
 
 function drawUniversalForceCircle(particle) {
-  ctx.setLineDash([5, 15]);
+  ctx.strokeStyle = 'blue'
+  ctx.setLineDash([5, 10]);
   ctx.beginPath()
   ctx.arc(particle.x, particle.y, universalPushForceRange, 0, Math.PI * 2, true)
   ctx.stroke()
