@@ -13,8 +13,8 @@ export function createParticle({ index }) {
     id: index,
     x: index * r * 2,
     y: r + (index % 5) * r * 2,
-    vx: 10,
-    vy: 0,
+    vx: 1,
+    vy: 2,
     r,
   }
 
@@ -32,11 +32,32 @@ export function createParticles(numParticles) {
 export function updateParticle(particle) {
   particle.x += particle.vx
   particle.y += particle.vy
+
+  teleportOnEdges(particle)
 }
 
 export function renderParticles() {
   for (const particle of state.particles) {
     updateParticle(particle)
     drawParticle(particle)
+  }
+}
+
+function teleportOnEdges(particle) {
+  const rightEdge = canvas.width - (particle.x + particle.r)
+  if (rightEdge < 0) {
+    particle.x = 0 + rightEdge
+  }
+  const leftEdge = (particle.x + particle.r)
+  if (leftEdge < 0) {
+    particle.x = canvas.width + leftEdge
+  }
+  const topEdge = (particle.y + particle.r)
+  if (topEdge < 0) {
+    particle.y = canvas.height - topEdge
+  }
+  const bottomEdge = canvas.height - (particle.y + particle.r)
+  if (bottomEdge < 0) {
+    particle.y = 0 - bottomEdge
   }
 }
