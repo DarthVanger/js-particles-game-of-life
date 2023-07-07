@@ -25,7 +25,7 @@ function applyParticleForce(p1, p2) {
 
 function universalPushForce(p1, p2) {
   if (p1 === p2) return;
-  const range = p1.r + 10
+  const range = p1.r + 30
   const forceConstant = 1
   const distX = p2.x - p1.x
   const distY = p2.y - p1.y
