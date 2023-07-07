@@ -1,4 +1,6 @@
 import { state } from './state.js'
+import { canvas, ctx } from './canvas.js'
+const universalPushForceRange = 80
 
 export function applyForce() {
   applyFriction()
@@ -25,16 +27,28 @@ function applyParticleForce(p1, p2) {
 
 function universalPushForce(p1, p2) {
   if (p1 === p2) return;
-  const range = p1.r + 30
   const forceConstant = 1
   const distX = p2.x - p1.x
   const distY = p2.y - p1.y
   const dist = Math.sqrt(distX * distX + distY * distY)
-  if (dist > range) return;
+  if (dist > universalPushForceRange) return;
 
-  const forceX = (distX / dist) * forceConstant
-  const forceY = (distY / dist) * forceConstant
+  const forceX = (distX / dist) * forceConstant / dist
+  const forceY = (distY / dist) * forceConstant / dist
 
   p2.vx += forceX
   p2.vy += forceY
+}
+
+export function renderForceCircles() {
+  for (const particle of state.particles) {
+    drawUniversalForceCircle(particle)
+  }
+}
+
+function drawUniversalForceCircle(particle) {
+  ctx.setLineDash([5, 15]);
+  ctx.beginPath()
+  ctx.arc(particle.x, particle.y, universalPushForceRange, 0, Math.PI * 2, true)
+  ctx.stroke()
 }
