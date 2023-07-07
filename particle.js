@@ -9,12 +9,14 @@ export function drawParticle (particle) {
 
 export function createParticle({ index }) {
   const r = 10
+  const row = Math.floor(index / 5)
+  const col = index % 5
   const particle = {
     id: index,
-    x: index * r * 2,
-    y: r + (index % 5) * r * 2,
-    vx: 1,
-    vy: 2,
+    x: col * r * 2,
+    y: r + row * r * 2,
+    vx: 0,
+    vy: 0,
     r,
   }
 
