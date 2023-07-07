@@ -16,7 +16,7 @@ export function createParticle({ index }) {
     x: col * r * 2,
     y: r + row * r * 2,
     vx: 0,
-    vy: 0,
+    vy: -1,
     r,
   }
 
@@ -46,19 +46,19 @@ export function renderParticles() {
 }
 
 function teleportOnEdges(particle) {
-  const rightEdge = canvas.width - (particle.x + particle.r)
+  const rightEdge = canvas.width - particle.x
   if (rightEdge < 0) {
     particle.x = 0 + rightEdge
   }
-  const leftEdge = (particle.x + particle.r)
+  const leftEdge = particle.x
   if (leftEdge < 0) {
     particle.x = canvas.width + leftEdge
   }
-  const topEdge = (particle.y + particle.r)
+  const topEdge = particle.y
   if (topEdge < 0) {
-    particle.y = canvas.height - topEdge
+    particle.y = canvas.height + topEdge
   }
-  const bottomEdge = canvas.height - (particle.y + particle.r)
+  const bottomEdge = canvas.height - particle.y
   if (bottomEdge < 0) {
     particle.y = 0 - bottomEdge
   }

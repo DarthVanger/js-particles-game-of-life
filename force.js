@@ -10,7 +10,6 @@ export function applyForce() {
 }
 
 function applyParticleForce(p1, p2) {
-
   universalPushForce(p1, p2)
 }
 
