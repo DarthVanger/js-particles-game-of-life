@@ -1,3 +1,4 @@
+import { state } from './state.js'
 import { canvas, ctx } from './canvas.js'
 
 export function drawParticle (particle) {
@@ -6,29 +7,36 @@ export function drawParticle (particle) {
   ctx.fill()
 }
 
-export function createParticle() {
+export function createParticle({ index }) {
+  const r = 10
   const particle = {
-    x: 0,
-    y: canvas.height / 2,
+    id: index,
+    x: index * r * 2,
+    y: r + (index % 5) * r * 2,
     vx: 10,
     vy: 0,
-    r: 50,
+    r,
   }
 
   return particle
 }
 
+export function createParticles(numParticles) {
+  for (let i = 0; i < numParticles; i++) {
+    state.particles.push(createParticle({
+      index: i,
+    }))
+  }
+}
+
 export function updateParticle(particle) {
   particle.x += particle.vx
   particle.y += particle.vy
-
-  handleEdges(particle)
 }
 
-function handleEdges(particle) {
-  const isRightEdge = particle.x + particle.r > canvas.width
-  if (isRightEdge) {
-    //createVirtualParticle(particle)
-    particle.x = 0 - particle.r
+export function renderParticles() {
+  for (const particle of state.particles) {
+    updateParticle(particle)
+    drawParticle(particle)
   }
 }

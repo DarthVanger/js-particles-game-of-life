@@ -1,12 +1,9 @@
-import { drawParticle, createParticle, updateParticle } from './particle.js'
-import { canvas, ctx } from './canvas.js'
+import { gameLoop } from './gameLoop.js'
+import { state } from './state.js'
+import { createParticles } from './particle.js'
 
-const particle = createParticle()
-function gameLoop() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
-  updateParticle(particle)
-  drawParticle(particle)
-  requestAnimationFrame(gameLoop)
-}
+const numParticles = 100
 
+createParticles(numParticles)
 gameLoop()
+
