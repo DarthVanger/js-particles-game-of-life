@@ -1,20 +1,28 @@
 import { state } from './state.js'
 import { canvas, ctx } from './canvas.js'
+import { getEdgeParticles } from './edges.js'
+
+const r = 10
 
 export function drawParticle (particle) {
   ctx.beginPath()
+  ctx.fillStyle = 'black'
   ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2, true)
   ctx.fill()
 }
 
-export function createParticle({ index }) {
-  const r = 10
-  const row = Math.floor(index / 20)
-  const col = index % 20
+export function drawEdgeParticle (particle) {
+  ctx.beginPath()
+  ctx.fillStyle = 'red'
+  ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2, true)
+  ctx.fill()
+}
+
+export function createParticle(props) {
   const particle = {
-    id: index,
-    x: 10 * r + col * r * 2,
-    y: 10 * r + row * r * 2,
+    id: props.id,
+    x: props.x,
+    y: props.y,
     vx: 0,
     vy: 0,
     r,
@@ -25,8 +33,12 @@ export function createParticle({ index }) {
 
 export function createParticles(numParticles) {
   for (let i = 0; i < numParticles; i++) {
+    const row = Math.floor(i / 20)
+    const col = i % 20
     state.particles.push(createParticle({
-      index: i,
+      id: i,
+      x: 10 * r + col * r * 2,
+      y: 10 * r + row * r * 2,
     }))
   }
 }
@@ -42,6 +54,10 @@ export function renderParticles() {
   for (const particle of state.particles) {
     updateParticle(particle)
     drawParticle(particle)
+    const edgeParticles = getEdgeParticles(particle)
+    for (const edgeParticle of edgeParticles) {
+      drawEdgeParticle(edgeParticle)
+    }
   }
 }
 
