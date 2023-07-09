@@ -16,14 +16,6 @@ export function getEdgeParticles(particle, range) {
       x: canvas.width + particle.x,
       y: particle.y,
     })
-    edgeParticles.push(particle)
-  }
-
-  if (isOutOfLeftEdge) {
-    const edgeParticle = createParticle({
-      x: canvas.width + particle.x,
-      y: particle.y,
-    })
     edgeParticles.push(edgeParticle)
   }
 
