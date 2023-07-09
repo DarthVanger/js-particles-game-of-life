@@ -28,7 +28,7 @@ function applyParticleForce(p1, p2) {
 }
 
 function applyParticleForceOnEdges(p1, p2) {
-  const edgeParticles = getEdgeParticles(p1)
+  const edgeParticles = getEdgeParticles(p1, universalPushForceRange)
   for (const edgeParticle of edgeParticles) {
     applyAllParticleForces(edgeParticle, p2)
   }
@@ -65,4 +65,13 @@ function drawUniversalForceCircle(particle) {
   ctx.beginPath()
   ctx.arc(particle.x, particle.y, universalPushForceRange, 0, Math.PI * 2, true)
   ctx.stroke()
+
+  const edgeParticles = getEdgeParticles(particle, universalPushForceRange)
+  for (const edgeParticle of edgeParticles) {
+    ctx.strokeStyle = 'red'
+    ctx.setLineDash([5, 0]);
+    ctx.beginPath()
+    ctx.arc(edgeParticle.x, edgeParticle.y, universalPushForceRange, 0, Math.PI * 2, true)
+    ctx.stroke()
+  }
 }

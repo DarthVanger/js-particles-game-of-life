@@ -1,10 +1,10 @@
 import { createParticle } from './particle.js'
 import { canvas, ctx } from './canvas.js'
 
-export function getEdgeParticles(particle) {
+export function getEdgeParticles(particle, range) {
   const edgeParticles = []
 
-  const r = particle.r
+  const r = range
 
   const isOutOfLeftEdge = particle.x - r < 0
   const isOutOfRightEdge = particle.x + r > canvas.width

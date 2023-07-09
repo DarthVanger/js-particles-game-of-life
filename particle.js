@@ -54,7 +54,7 @@ export function renderParticles() {
   for (const particle of state.particles) {
     updateParticle(particle)
     drawParticle(particle)
-    const edgeParticles = getEdgeParticles(particle)
+    const edgeParticles = getEdgeParticles(particle, particle.r)
     for (const edgeParticle of edgeParticles) {
       drawEdgeParticle(edgeParticle)
     }
