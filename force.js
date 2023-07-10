@@ -28,29 +28,38 @@ function applyParticleForce(p1, p2) {
 }
 
 function applyParticleForceOnEdges(p1, p2) {
-  const edgeParticles = getEdgeParticles(p1, universalPushForceRange)
-  for (const edgeParticle of edgeParticles) {
+  const edgeParticles1 = getEdgeParticles(p1, universalPushForceRange)
+  for (const edgeParticle of edgeParticles1) {
     applyAllParticleForces(edgeParticle, p2)
+  }
+
+  const edgeParticles2 = getEdgeParticles(p2, universalPushForceRange)
+  for (const edgeParticle of edgeParticles2) {
+    const force = universalPushForce(p2, edgeParticle)
+    p1.vx += force.x
+    p1.vy += force.y
   }
 }
 
 function applyAllParticleForces(p1, p2) {
-    universalPushForce(p1, p2)
+    const force = universalPushForce(p1, p2)
+    p2.vx += force.x
+    p2.vy += force.y
 }
 
 function universalPushForce(p1, p2) {
-  if (p1 === p2) return;
+  const zero = { x: 0, y: 0 }
+  if (p1 === p2) return zero;
   const forceConstant = 1
   const distX = p2.x - p1.x
   const distY = p2.y - p1.y
   const dist = Math.sqrt(distX * distX + distY * distY)
-  if (dist > universalPushForceRange * 2) return;
+  if (dist > universalPushForceRange * 2) return zero;
 
   const forceX = (distX / dist) * forceConstant / dist
   const forceY = (distY / dist) * forceConstant / dist
 
-  p2.vx += forceX
-  p2.vy += forceY
+  return { x: forceX, y: forceY }
 }
 
 export function renderForceCircles() {
