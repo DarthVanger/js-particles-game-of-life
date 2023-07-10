@@ -37,9 +37,9 @@ function applyParticleForceOnEdges(p1, p2) {
 
   const edgeParticles2 = getEdgeParticles(p2, universalPushForceRange)
   for (const edgeParticle of edgeParticles2) {
-    const force = universalPushForce(p2, edgeParticle)
-    p1.vx += force.x
-    p1.vy += force.y
+    const force = universalPushForce(p1, edgeParticle)
+    p2.vx += force.x
+    p2.vy += force.y
   }
 }
 
