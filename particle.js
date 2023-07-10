@@ -33,14 +33,14 @@ export function createParticle(props) {
 
 export function createParticles(numParticles) {
   for (let i = 0; i < numParticles; i++) {
-    const dist =  100
-    const particlesInRow = Math.floor(canvas.width /  dist)
+    const dist = canvas.height / Math.sqrt(numParticles)
+    const particlesInRow = Math.floor(canvas.width / dist)
     const row = Math.floor(i / particlesInRow)
     const col = i % particlesInRow
     state.particles.push(createParticle({
       id: i,
-      x: col * dist + 50,
-      y: row * dist + 100,
+      x: col * dist + dist,
+      y: row * dist + dist,
     }))
   }
 }
