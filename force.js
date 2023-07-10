@@ -40,7 +40,7 @@ function applyAllParticleForces(p1, p2) {
 
 function universalPushForce(p1, p2) {
   if (p1 === p2) return;
-  const forceConstant = 10
+  const forceConstant = 1
   const distX = p2.x - p1.x
   const distY = p2.y - p1.y
   const dist = Math.sqrt(distX * distX + distY * distY)
