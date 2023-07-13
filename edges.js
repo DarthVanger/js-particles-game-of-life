@@ -11,9 +11,14 @@ export function getEdgeParticles(particle, range) {
   const isOutOfTopEdge = particle.y - r < 0
   const isOutOfBottomEdge = particle.y + r > canvas.height
 
+  const teleportRight = canvas.width + particle.x
+  const teleportLeft = particle.x - canvas.width
+  const teleportTop = particle.y - canvas.height
+  const teleportBottom = canvas.height + particle.y
+
   if (isOutOfLeftEdge) {
     const edgeParticle = createParticle({
-      x: canvas.width + particle.x,
+      x: teleportRight,
       y: particle.y,
     })
     edgeParticles.push(edgeParticle)
@@ -21,7 +26,7 @@ export function getEdgeParticles(particle, range) {
 
   if (isOutOfRightEdge) {
     const edgeParticle = createParticle({
-      x: particle.x - canvas.width,
+      x: teleportLeft,
       y: particle.y,
     })
     edgeParticles.push(edgeParticle)
@@ -29,8 +34,8 @@ export function getEdgeParticles(particle, range) {
 
   if (isOutOfTopEdge) {
     const edgeParticle = createParticle({
-      x:  particle.x,
-      y: canvas.height + particle.y,
+      x: particle.x,
+      y: teleportBottom,
     })
     edgeParticles.push(edgeParticle)
   }
@@ -38,7 +43,39 @@ export function getEdgeParticles(particle, range) {
   if (isOutOfBottomEdge) {
     const edgeParticle = createParticle({
       x: particle.x,
-      y: particle.y - canvas.height,
+      y: teleportTop,
+    })
+    edgeParticles.push(edgeParticle)
+  }
+
+  if (isOutOfLeftEdge && isOutOfTopEdge) {
+    const edgeParticle = createParticle({
+      x: teleportRight,
+      y: teleportBottom,
+    })
+    edgeParticles.push(edgeParticle)
+  }
+
+  if (isOutOfLeftEdge && isOutOfBottomEdge) {
+    const edgeParticle = createParticle({
+      x: teleportRight,
+      y: teleportTop,
+    })
+    edgeParticles.push(edgeParticle)
+  }
+
+  if (isOutOfRightEdge && isOutOfTopEdge) {
+    const edgeParticle = createParticle({
+      x: teleportLeft,
+      y: teleportBottom,
+    })
+    edgeParticles.push(edgeParticle)
+  }
+
+  if (isOutOfRightEdge && isOutOfBottomEdge) {
+    const edgeParticle = createParticle({
+      x: teleportLeft,
+      y: teleportTop,
     })
     edgeParticles.push(edgeParticle)
   }
