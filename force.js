@@ -1,6 +1,6 @@
 import { state } from './state.js'
 import { canvas, ctx } from './canvas.js'
-import { getEdgeParticle } from './edges.js'
+import { getEdgeParticles } from './edges.js'
 const universalPushForceRange = 80
 
 export function applyForce() {
@@ -25,26 +25,30 @@ function applyFriction() {
 }
 
 function applyParticleForce(p1, p2) {
-  applyUniversalPushForce(p1, p2)
-  applyForceToEdgeParticles(p1, p2)
-
-  const edgeParticle1 = getEdgeParticle(p1, universalPushForceRange)
-  if (edgeParticle1) {
-    applyUniversalPushForce(edgeParticle1, p2)
-    applyForceToEdgeParticles(edgeParticle1, p2)
-  }
+  applyAllParticleForces(p1, p2)
+  applyParticleForceOnEdges(p1, p2)
 }
 
 function applyForceToEdgeParticles(p1, p2) {
-  const edgeParticle2 = getEdgeParticle(p2, universalPushForceRange)
-  if (edgeParticle2) {
-    const force = universalPushForce(p1, edgeParticle2)
+  const edgeParticles2 = getEdgeParticles(p2, universalPushForceRange)
+  for (const edgeParticle of edgeParticles2) {
+    const force = universalPushForce(p1, edgeParticle)
     p2.vx += force.x
     p2.vy += force.y
   }
 }
 
-function applyUniversalPushForce(p1, p2) {
+function applyParticleForceOnEdges(p1, p2) {
+  const edgeParticles1 = getEdgeParticles(p1, universalPushForceRange)
+  for (const edgeParticle of edgeParticles1) {
+    applyAllParticleForces(edgeParticle, p2)
+    applyForceToEdgeParticles(edgeParticle, p2)
+  }
+
+  applyForceToEdgeParticles(p1, p2)
+}
+
+function applyAllParticleForces(p1, p2) {
     const force = universalPushForce(p1, p2)
     p2.vx += force.x
     p2.vy += force.y
@@ -77,8 +81,8 @@ function drawUniversalForceCircle(particle) {
   ctx.arc(particle.x, particle.y, universalPushForceRange, 0, Math.PI * 2, true)
   ctx.stroke()
 
-  const edgeParticle = getEdgeParticle(particle, universalPushForceRange)
-  if (edgeParticle) {
+  const edgeParticles = getEdgeParticles(particle, universalPushForceRange)
+  for (const edgeParticle of edgeParticles) {
     ctx.strokeStyle = 'red'
     ctx.setLineDash([5, 0]);
     ctx.beginPath()

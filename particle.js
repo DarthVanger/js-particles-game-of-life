@@ -1,6 +1,6 @@
 import { state } from './state.js'
 import { canvas, ctx } from './canvas.js'
-import { getEdgeParticle } from './edges.js'
+import { getEdgeParticles } from './edges.js'
 
 const r = 10
 
@@ -56,8 +56,8 @@ export function renderParticles() {
   for (const particle of state.particles) {
     updateParticle(particle)
     drawParticle(particle)
-    const edgeParticle = getEdgeParticle(particle, particle.r)
-    if (edgeParticle) {
+    const edgeParticles = getEdgeParticles(particle, particle.r)
+    for (const edgeParticle of edgeParticles) {
       drawEdgeParticle(edgeParticle)
     }
   }

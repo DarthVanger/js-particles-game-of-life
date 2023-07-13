@@ -1,7 +1,9 @@
 import { createParticle } from './particle.js'
 import { canvas, ctx } from './canvas.js'
 
-export function getEdgeParticle(particle, range) {
+export function getEdgeParticles(particle, range) {
+  const edgeParticles = []
+
   const r = range
 
   const isOutOfLeftEdge = particle.x - r < 0
@@ -9,33 +11,37 @@ export function getEdgeParticle(particle, range) {
   const isOutOfTopEdge = particle.y - r < 0
   const isOutOfBottomEdge = particle.y + r > canvas.height
 
-  const edgeParticle = createParticle({
-    x: particle.x,
-    y: particle.y,
-  })
-
-  if (
-    !isOutOfLeftEdge && !isOutOfRightEdge &&
-    !isOutOfTopEdge && !isOutOfBottomEdge
-  ) {
-    return null
-  }
-
   if (isOutOfLeftEdge) {
-    edgeParticle.x = canvas.width + particle.x
+    const edgeParticle = createParticle({
+      x: canvas.width + particle.x,
+      y: particle.y,
+    })
+    edgeParticles.push(edgeParticle)
   }
 
   if (isOutOfRightEdge) {
-    edgeParticle.x = particle.x - canvas.width
+    const edgeParticle = createParticle({
+      x: particle.x - canvas.width,
+      y: particle.y,
+    })
+    edgeParticles.push(edgeParticle)
   }
 
   if (isOutOfTopEdge) {
-    edgeParticle.y = canvas.height + particle.y
+    const edgeParticle = createParticle({
+      x:  particle.x,
+      y: canvas.height + particle.y,
+    })
+    edgeParticles.push(edgeParticle)
   }
 
   if (isOutOfBottomEdge) {
-    edgeParticle.y = particle.y - canvas.height
+    const edgeParticle = createParticle({
+      x: particle.x,
+      y: particle.y - canvas.height,
+    })
+    edgeParticles.push(edgeParticle)
   }
 
-  return edgeParticle
+  return edgeParticles 
 }
