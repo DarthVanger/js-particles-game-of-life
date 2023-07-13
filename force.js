@@ -26,7 +26,13 @@ function applyFriction() {
 
 function applyParticleForce(p1, p2) {
   applyAllParticleForces(p1, p2)
-  applyParticleForceOnEdges(p1, p2)
+  applyForceToEdgeParticles(p1, p2)
+
+  const edgeParticles1 = getEdgeParticles(p1, universalPushForceRange)
+  for (const edgeParticle of edgeParticles1) {
+    applyAllParticleForces(edgeParticle, p2)
+    applyForceToEdgeParticles(edgeParticle, p2)
+  }
 }
 
 function applyForceToEdgeParticles(p1, p2) {
@@ -36,16 +42,6 @@ function applyForceToEdgeParticles(p1, p2) {
     p2.vx += force.x
     p2.vy += force.y
   }
-}
-
-function applyParticleForceOnEdges(p1, p2) {
-  const edgeParticles1 = getEdgeParticles(p1, universalPushForceRange)
-  for (const edgeParticle of edgeParticles1) {
-    applyAllParticleForces(edgeParticle, p2)
-    applyForceToEdgeParticles(edgeParticle, p2)
-  }
-
-  applyForceToEdgeParticles(p1, p2)
 }
 
 function applyAllParticleForces(p1, p2) {
