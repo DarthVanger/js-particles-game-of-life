@@ -1,25 +1,14 @@
 import { state } from './state.js'
 import { canvas, ctx } from './canvas.js'
+import { getEdgeParticles } from './edges.js'
 
 const r = 10
 
-export function drawParticle (particle, color = 'black') {
-  ctx.save()
-
+export function drawParticle (particle) {
   ctx.beginPath()
-  ctx.fillStyle = color
+  ctx.fillStyle = 'black'
   ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2, true)
   ctx.fill()
-
-  ctx.lineWidth = 5
-  ctx.strokeStyle = color
-  const forceMultiplier = 1000
-  ctx.beginPath()
-  ctx.moveTo(particle.x, particle.y)
-  ctx.lineTo(particle.x + particle.forceX * forceMultiplier, particle.y + particle.forceY * forceMultiplier)
-  ctx.stroke()
-
-  ctx.restore()
 }
 
 export function drawEdgeParticle (particle) {
@@ -36,8 +25,6 @@ export function createParticle(props) {
     y: props.y,
     vx: 0,
     vy: 0,
-    forceX: 0,
-    forceY: 0,
     r,
   }
 
@@ -46,17 +33,19 @@ export function createParticle(props) {
 
 export function createParticles(numParticles) {
   for (let i = 0; i < numParticles; i++) {
+    const dist = canvas.height / Math.sqrt(numParticles)
+    const particlesInRow = Math.floor(canvas.width / dist)
+    const row = Math.floor(i / particlesInRow)
+    const col = i % particlesInRow
     state.particles.push(createParticle({
       id: i,
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
+      x: col * dist + dist,
+      y: row * dist + dist,
     }))
   }
 }
 
 export function updateParticle(particle) {
-  particle.vx += particle.forceX
-  particle.vy += particle.forceY
   particle.x += particle.vx
   particle.y += particle.vy
 
@@ -67,13 +56,10 @@ export function renderParticles() {
   for (const particle of state.particles) {
     updateParticle(particle)
     drawParticle(particle)
-    for (const edgeParticle of particle.edgeParticles) {
-      edgeParticle.x += particle.vx
-      edgeParticle.y += particle.vy
-      drawParticle(edgeParticle, 'red')
+    const edgeParticles = getEdgeParticles(particle, particle.r)
+    for (const edgeParticle of edgeParticles) {
+      drawEdgeParticle(edgeParticle)
     }
-    particle.forceX = 0
-    particle.forceY = 0
   }
 }
 
@@ -95,5 +81,4 @@ function teleportOnEdges(particle) {
   if (bottomEdge < 0) {
     particle.y = 0 + r + bottomEdge
   }
-
 }
