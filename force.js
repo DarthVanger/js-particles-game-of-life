@@ -1,7 +1,7 @@
 import { state } from './state.js'
 import { canvas, ctx } from './canvas.js'
 import { getEdgeParticles } from './edges.js'
-const universalPushForceRange = 80
+const universalPushForceRange = 200
 
 export function applyForce() {
   applyFriction()
