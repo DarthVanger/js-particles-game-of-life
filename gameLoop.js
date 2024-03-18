@@ -7,6 +7,6 @@ export function gameLoop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   applyForce()
   renderParticles()
-  renderForceCircles()
+  //renderForceCircles()
   requestAnimationFrame(gameLoop)
 }

@@ -18,6 +18,7 @@ export function getEdgeParticles(particle, range) {
 
   if (isOutOfLeftEdge) {
     const edgeParticle = createParticle({
+      ...particle,
       x: teleportRight,
       y: particle.y,
     })
@@ -26,6 +27,7 @@ export function getEdgeParticles(particle, range) {
 
   if (isOutOfRightEdge) {
     const edgeParticle = createParticle({
+      ...particle,
       x: teleportLeft,
       y: particle.y,
     })
@@ -34,6 +36,7 @@ export function getEdgeParticles(particle, range) {
 
   if (isOutOfTopEdge) {
     const edgeParticle = createParticle({
+      ...particle,
       x: particle.x,
       y: teleportBottom,
     })
@@ -42,6 +45,7 @@ export function getEdgeParticles(particle, range) {
 
   if (isOutOfBottomEdge) {
     const edgeParticle = createParticle({
+      ...particle,
       x: particle.x,
       y: teleportTop,
     })
@@ -50,6 +54,7 @@ export function getEdgeParticles(particle, range) {
 
   if (isOutOfLeftEdge && isOutOfTopEdge) {
     const edgeParticle = createParticle({
+      ...particle,
       x: teleportRight,
       y: teleportBottom,
     })
@@ -58,6 +63,7 @@ export function getEdgeParticles(particle, range) {
 
   if (isOutOfLeftEdge && isOutOfBottomEdge) {
     const edgeParticle = createParticle({
+      ...particle,
       x: teleportRight,
       y: teleportTop,
     })
@@ -66,6 +72,7 @@ export function getEdgeParticles(particle, range) {
 
   if (isOutOfRightEdge && isOutOfTopEdge) {
     const edgeParticle = createParticle({
+      ...particle,
       x: teleportLeft,
       y: teleportBottom,
     })
@@ -74,6 +81,7 @@ export function getEdgeParticles(particle, range) {
 
   if (isOutOfRightEdge && isOutOfBottomEdge) {
     const edgeParticle = createParticle({
+      ...particle,
       x: teleportLeft,
       y: teleportTop,
     })

@@ -2,11 +2,11 @@ import { state } from './state.js'
 import { canvas, ctx } from './canvas.js'
 import { getEdgeParticles } from './edges.js'
 
-const r = 10
+const r = 5
 
 export function drawParticle (particle) {
   ctx.beginPath()
-  ctx.fillStyle = 'black'
+  ctx.fillStyle = colorNumberToColorHex(particle.color)
   ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2, true)
   ctx.fill()
 }
@@ -25,6 +25,7 @@ export function createParticle(props) {
     y: props.y,
     vx: 0,
     vy: 0,
+    color: props.color,
     r,
   }
 
@@ -39,8 +40,11 @@ export function createParticles(numParticles) {
     const col = i % particlesInRow
     state.particles.push(createParticle({
       id: i,
-      x: col * dist + dist,
-      y: row * dist + dist,
+      //x: col * dist + dist,
+      //y: row * dist + dist,
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      color: i % 3,
     }))
   }
 }
@@ -58,7 +62,7 @@ export function renderParticles() {
     drawParticle(particle)
     const edgeParticles = getEdgeParticles(particle, particle.r)
     for (const edgeParticle of edgeParticles) {
-      drawEdgeParticle(edgeParticle)
+      drawParticle(edgeParticle)
     }
   }
 }
@@ -80,5 +84,16 @@ function teleportOnEdges(particle) {
   const bottomEdge = canvas.height - particle.y + r
   if (bottomEdge < 0) {
     particle.y = 0 + r + bottomEdge
+  }
+}
+
+function colorNumberToColorHex(color) {
+  switch (color) {
+    case 0:
+      return 'red'
+    case 1:
+      return 'green'
+    case 2:
+      return 'blue'
   }
 }

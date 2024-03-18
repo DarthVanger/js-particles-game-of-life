@@ -1,7 +1,9 @@
 import { state } from './state.js'
 import { canvas, ctx } from './canvas.js'
 import { getEdgeParticles } from './edges.js'
-const universalPushForceRange = 200
+
+const universalPushForceRange = 20
+const colorForceRange = 100
 
 export function applyForce() {
   applyFriction()
@@ -38,14 +40,14 @@ function applyParticleForce(p1, p2) {
 function applyForceToEdgeParticles(p1, p2) {
   const edgeParticles2 = getEdgeParticles(p2, universalPushForceRange)
   for (const edgeParticle of edgeParticles2) {
-    const force = universalPushForce(p1, edgeParticle)
+    const force = getForceBetweenParticles(p1, edgeParticle)
     p2.vx += force.x
     p2.vy += force.y
   }
 }
 
 function applyAllParticleForces(p1, p2) {
-    const force = universalPushForce(p1, p2)
+    const force = getForceBetweenParticles(p1, p2)
     p2.vx += force.x
     p2.vy += force.y
 }
@@ -62,6 +64,40 @@ function universalPushForce(p1, p2) {
   const forceY = (distY / dist) * forceConstant / dist
 
   return { x: forceX, y: forceY }
+}
+
+function colorForce(p1, p2) {
+  const zeroForce = { x: 0, y: 0 }
+
+  const forceMatrix = [
+    [-1.5, -0.5, 0],
+    [0, 0, 0],
+    [0, 1, 0],
+  ]
+
+  const forceConstant = forceMatrix[p1.color][p2.color]
+
+  const distX = p2.x - p1.x
+  const distY = p2.y - p1.y
+
+  const dist = Math.sqrt(distX * distX + distY * distY)
+
+  if (dist > colorForceRange * 2 || dist < universalPushForceRange) return zeroForce;
+
+  const forceX = (distX / dist) * forceConstant / dist
+  const forceY = (distY / dist) * forceConstant / dist
+
+  return { x: forceX, y: forceY }
+}
+
+function getForceBetweenParticles(p1, p2) {
+  const universalPushForceValue = universalPushForce(p1, p2)
+  const colorForceValue = colorForce(p1, p2)
+
+  return {
+    x: universalPushForceValue.x + colorForceValue.x,
+    y: universalPushForceValue.y + colorForceValue.y
+  }
 }
 
 export function renderForceCircles() {
