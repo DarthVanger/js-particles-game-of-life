@@ -1,7 +1,7 @@
 import { state } from './state.js'
 import { canvas, ctx } from './canvas.js'
-
-const r = 5
+import { add, remove, move } from './grid.js'
+import { particleRadius } from './gameConstants.js'
 
 export function drawParticle (particle) {
   ctx.beginPath()
@@ -18,7 +18,7 @@ export function createParticle(props) {
     vx: 0,
     vy: 0,
     color: props.color,
-    r,
+    r: particleRadius,
   }
 
   return particle
@@ -30,22 +30,29 @@ export function createParticles(numParticles) {
     const particlesInRow = Math.floor(canvas.width / dist)
     const row = Math.floor(i / particlesInRow)
     const col = i % particlesInRow
-    state.particles.push(createParticle({
+    const particle = createParticle({
       id: i,
       //x: col * dist + dist,
       //y: row * dist + dist,
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
       color: i % 3,
-    }))
+    })
+
+    state.particles.push(particle)
+    add(particle)
   }
 }
 
 export function updateParticle(particle) {
+  remove(particle)
+
   particle.x += particle.vx
   particle.y += particle.vy
-
   teleportOnEdges(particle)
+
+  add(particle)
+
 }
 
 export function renderParticles() {
@@ -63,7 +70,7 @@ function teleportOnEdges(particle) {
   }
   const rightEdge = canvas.width - particle.x + r
   if (rightEdge < 0) {
-    particle.x = 0 + r + rightEdge
+    particle.x = 0 + r - rightEdge
   }
   const topEdge = particle.y + r
   if (topEdge < 0) {
@@ -71,7 +78,7 @@ function teleportOnEdges(particle) {
   }
   const bottomEdge = canvas.height - particle.y + r
   if (bottomEdge < 0) {
-    particle.y = 0 + r + bottomEdge
+    particle.y = 0 + r - bottomEdge
   }
 }
 

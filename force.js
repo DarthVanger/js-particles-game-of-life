@@ -1,23 +1,21 @@
 import { state } from './state.js'
 import { canvas, ctx } from './canvas.js'
-
-const universalPushForceRange = 20
-const colorForceRange = 200
+import { universalPushForceRange, colorForceRange } from './gameConstants.js'
+import { getParticlesInRange } from './grid.js'
 
 export function applyForce() {
   applyFriction()
   const { particles } = state;
   for (let i = 0; i < particles.length; i++) {
-    for (let j = 0; j < particles.length; j++) {
-      if (i !== j) {
-        applyParticleForce(particles[i],particles[j])
-      }
+    const particlesInRange = getParticlesInRange(particles[i])
+    for (let j = 0; j < particlesInRange.length; j++) {
+      applyParticleForce(particles[i], particlesInRange[j])
     }
   }
 }
 
 function applyFriction() {
-  const frictionConstant = 0.97
+  const frictionConstant = 0.90
   const { particles } = state;
   for (const particle of particles) {
     particle.vx = particle.vx * frictionConstant
@@ -60,10 +58,14 @@ function getForceBetweenParticles(p1, p2) {
   }
 
   const dist = Math.sqrt(distX * distX + distY * distY)
+  if (dist === 0) {
+    throw new Error('Trying to apply force between particles with distance = 0')
+  }
 
   if (dist < universalPushForceRange) {
-    force.x = (distX / dist) / dist
-    force.y = (distY / dist) / dist
+    const universalPushForceConstant = 1
+    force.x = (distX / dist) * universalPushForceConstant / dist
+    force.y = (distY / dist) * universalPushForceConstant / dist
     return force
   }
 
