@@ -1,6 +1,5 @@
 import { state } from './state.js'
 import { canvas, ctx } from './canvas.js'
-import { getEdgeParticles } from './edges.js'
 
 const universalPushForceRange = 20
 const colorForceRange = 100
@@ -28,22 +27,6 @@ function applyFriction() {
 
 function applyParticleForce(p1, p2) {
   applyAllParticleForces(p1, p2)
-  applyForceToEdgeParticles(p1, p2)
-
-  const edgeParticles1 = getEdgeParticles(p1, universalPushForceRange)
-  for (const edgeParticle of edgeParticles1) {
-    applyAllParticleForces(edgeParticle, p2)
-    applyForceToEdgeParticles(edgeParticle, p2)
-  }
-}
-
-function applyForceToEdgeParticles(p1, p2) {
-  const edgeParticles2 = getEdgeParticles(p2, universalPushForceRange)
-  for (const edgeParticle of edgeParticles2) {
-    const force = getForceBetweenParticles(p1, edgeParticle)
-    p2.vx += force.x
-    p2.vy += force.y
-  }
 }
 
 function applyAllParticleForces(p1, p2) {

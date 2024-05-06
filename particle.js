@@ -1,19 +1,11 @@
 import { state } from './state.js'
 import { canvas, ctx } from './canvas.js'
-import { getEdgeParticles } from './edges.js'
 
 const r = 5
 
 export function drawParticle (particle) {
   ctx.beginPath()
   ctx.fillStyle = colorNumberToColorHex(particle.color)
-  ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2, true)
-  ctx.fill()
-}
-
-export function drawEdgeParticle (particle) {
-  ctx.beginPath()
-  ctx.fillStyle = 'red'
   ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2, true)
   ctx.fill()
 }
@@ -60,10 +52,6 @@ export function renderParticles() {
   for (const particle of state.particles) {
     updateParticle(particle)
     drawParticle(particle)
-    const edgeParticles = getEdgeParticles(particle, particle.r)
-    for (const edgeParticle of edgeParticles) {
-      drawParticle(edgeParticle)
-    }
   }
 }
 
