@@ -42,8 +42,22 @@ function getForceBetweenParticles(p1, p2) {
 
   const forceConstant = forceMatrix[p1.color][p2.color]
 
-  const distX = p2.x - p1.x
-  const distY = p2.y - p1.y
+  let distX = p2.x - p1.x
+  let distY = p2.y - p1.y
+
+  // Apply forces through the edges of screen
+  if (distX > canvas.width / 2) {
+    distX = distX - canvas.width
+  }
+  if (distX < -canvas.width / 2) {
+    distX = distX + canvas.width
+  }
+  if (distY > canvas.height / 2) {
+    distY = distY - canvas.height
+  }
+  if (distY < -canvas.height / 2) {
+    distY = distY + canvas.height
+  }
 
   const dist = Math.sqrt(distX * distX + distY * distY)
 
