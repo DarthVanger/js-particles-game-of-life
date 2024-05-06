@@ -99,26 +99,3 @@ function getForceBetweenParticles(p1, p2) {
     y: universalPushForceValue.y + colorForceValue.y
   }
 }
-
-export function renderForceCircles() {
-  for (const particle of state.particles) {
-    drawUniversalForceCircle(particle)
-  }
-}
-
-function drawUniversalForceCircle(particle) {
-  ctx.strokeStyle = 'blue'
-  ctx.setLineDash([5, 10]);
-  ctx.beginPath()
-  ctx.arc(particle.x, particle.y, universalPushForceRange, 0, Math.PI * 2, true)
-  ctx.stroke()
-
-  const edgeParticles = getEdgeParticles(particle, universalPushForceRange)
-  for (const edgeParticle of edgeParticles) {
-    ctx.strokeStyle = 'red'
-    ctx.setLineDash([5, 0]);
-    ctx.beginPath()
-    ctx.arc(edgeParticle.x, edgeParticle.y, universalPushForceRange, 0, Math.PI * 2, true)
-    ctx.stroke()
-  }
-}
