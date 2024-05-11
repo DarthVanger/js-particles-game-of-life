@@ -47,15 +47,21 @@ export const getParticlesInRange = (particle) => {
   let particles = []
   const { i, j } = getParticleGridPosition(particle)
 
-  particles = particles.concat(cells[i]?.[j]?.particles?.filter(p => p.id !== particle.id) || [])
-  particles = particles.concat(cells[i - 1]?.[j]?.particles || [])
-  particles = particles.concat(cells[i + 1]?.[j]?.particles || [])
-  particles = particles.concat(cells[i]?.[j - 1]?.particles || [])
-  particles = particles.concat(cells[i]?.[j + 1]?.particles || [])
-  particles = particles.concat(cells[i - 1]?.[j - 1]?.particles || [])
-  particles = particles.concat(cells[i - 1]?.[j + 1]?.particles || [])
-  particles = particles.concat(cells[i + 1]?.[j - 1]?.particles || [])
-  particles = particles.concat(cells[i + 1]?.[j + 1]?.particles || [])
+  particles = particles.concat(cells[i][j].particles.filter(p => p.id !== particle.id))
+
+  const topIndex = i - 1 > 0 ? i - 1 : numRows - 1
+  const leftIndex = j - 1 > 0 ? j - 1 : numCols - 1
+  const bottomIndex = i + 1 > numRows - 1 ? 0 : i + 1
+  const rightIndex = j + 1 > numCols - 1 ? 0 : j + 1
+
+  particles = particles.concat(cells[topIndex][j].particles)
+  particles = particles.concat(cells[bottomIndex][j].particles)
+  particles = particles.concat(cells[i][leftIndex].particles)
+  particles = particles.concat(cells[i][rightIndex].particles)
+  particles = particles.concat(cells[topIndex][leftIndex].particles)
+  particles = particles.concat(cells[topIndex][rightIndex].particles)
+  particles = particles.concat(cells[bottomIndex][leftIndex].particles)
+  particles = particles.concat(cells[bottomIndex][rightIndex].particles)
 
   return particles
    
