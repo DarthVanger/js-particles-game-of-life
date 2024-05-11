@@ -8,6 +8,7 @@ export function applyForce() {
   const { particles } = state;
   for (let i = 0; i < particles.length; i++) {
     const particlesInRange = getParticlesInRange(particles[i])
+
     for (let j = 0; j < particlesInRange.length; j++) {
       applyParticleForce(particles[i], particlesInRange[j])
       limitSpeed(particlesInRange[j])

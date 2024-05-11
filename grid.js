@@ -1,14 +1,10 @@
 import { canvas } from './canvas.js'
 import { universalPushForceRange, colorForceRange, particleRadius } from './gameConstants.js'
 
-let cellWidth = colorForceRange
-let cellHeight = colorForceRange
-const numRows = Math.ceil(canvas.height / cellHeight)
-const numCols = Math.ceil(canvas.width / cellWidth)
-cellWidth += canvas.width % colorForceRange / numCols
-canvas.width = cellWidth * (numCols - 1)
-cellHeight += canvas.height % colorForceRange / numCols
-canvas.height = cellHeight * (numRows - 1)
+const numRows = 10
+const numCols = 10
+const cellHeight = canvas.height / numRows
+const cellWidth = canvas.width / numCols
 
 const cells = createCells()
 
@@ -50,29 +46,63 @@ export const remove = (particle) => {
 export const getParticlesInRange = (particle) => {
   let particles = []
   const { i, j } = getParticleGridPosition(particle)
+  //console.debug(`[getParticlesInRange] particle`, particle)
+  //console.debug(`[getParticlesInRange] particle cell: ${i}, ${j}`)
 
   const topIndex = i - 1 > 0 ? i - 1 : numRows - 1
   const leftIndex = j - 1 > 0 ? j - 1 : numCols - 1
   const bottomIndex = i + 1 < numRows - 1 ? i + 1 : 0
   const rightIndex = j + 1 < numCols - 1 ? j + 1 : 0
 
-  particles = particles.concat(cells[i][j].particles.filter(p => p.id !== particle.id))
-  particles = particles.concat(cells[topIndex][j].particles)
-  particles = particles.concat(cells[bottomIndex][j].particles)
-  particles = particles.concat(cells[i][leftIndex].particles)
-  particles = particles.concat(cells[i][rightIndex].particles)
-  particles = particles.concat(cells[topIndex][leftIndex].particles)
-  particles = particles.concat(cells[topIndex][rightIndex].particles)
-  particles = particles.concat(cells[bottomIndex][leftIndex].particles)
-  particles = particles.concat(cells[bottomIndex][rightIndex].particles)
+  //console.debug(`[getParticlesInRange] neighbor cell indexes:
+  //  topIndex: ${topIndex}; leftIndex: ${leftIndex};
+  //  bottomIndex: ${bottomIndex}; rightIndex: ${rightIndex}
+  //`)
 
-  return particles
+  const sameCellParticles = cells[i][j].particles.filter(p => p.id !== particle.id)
+  //console.debug('[getParticlesInRange] sameCellParticles: ', sameCellParticles)
+
+  const topCellParticles = cells[topIndex][j].particles
+  //console.debug('[getParticlesInRange] topCellParticles: ', topCellParticles)
+
+  const bottomCellParticles = cells[bottomIndex][j].particles
+  //console.debug('[getParticlesInRange] bottomCellParticles: ', bottomCellParticles)
+    
+  const leftCellParticles = cells[i][leftIndex].particles
+  //console.debug('[getParticlesInRange] leftCellParticles: ', leftCellParticles)
+
+  const rightCellParticles = cells[i][rightIndex].particles
+  //console.debug('[getParticlesInRange] rightCellParticles: ', rightCellParticles)
+
+  const topLeftCellParticles = cells[topIndex][leftIndex].particles
+  //console.debug('[getParticlesInRange] topLeftCellParticles: ', topLeftCellParticles)
+
+  const topRightCellParticles = cells[topIndex][rightIndex].particles
+  //console.debug('[getParticlesInRange] topRightCellParticles: ', topRightCellParticles)
+
+  const bottomLeftCellParticles = cells[bottomIndex][leftIndex].particles
+  //console.debug('[getParticlesInRange] bottomLeftCellParticles: ', bottomLeftCellParticles)
+
+  const bottomRightCellParticles = cells[bottomIndex][rightIndex].particles
+  //console.debug('[getParticlesInRange] bottomRightCellParticles: ', bottomRightCellParticles)
+
+  return [
+    ...sameCellParticles,
+    ...topCellParticles,
+    ...bottomCellParticles,
+    ...leftCellParticles,
+    ...rightCellParticles,
+    ...topLeftCellParticles,
+    ...topRightCellParticles,
+    ...bottomLeftCellParticles,
+    ...bottomRightCellParticles,
+  ]
    
 }
 
 const getParticleGridPosition = (particle) => {
-  const j = Math.floor((particle.x) / cellWidth) + 1
-  const i = Math.floor((particle.y)  / cellHeight) + 1
+  const j = Math.floor((particle.x) / cellWidth)
+  const i = Math.floor((particle.y)  / cellHeight)
   return { i, j }
 }
 
@@ -97,8 +127,8 @@ function createGridGraphics() {
       cellBox.style.height = cellHeight + 'px'
       cellBox.style.border = '1px solid black'
       cellBox.style.position = 'absolute'
-      cellBox.style.top = (i - 1) * cellHeight + 'px'
-      cellBox.style.left = (j - 1) * cellWidth + 'px'
+      cellBox.style.top = i * cellHeight + 'px'
+      cellBox.style.left = j * cellWidth + 'px'
 
       cells[i][j].element = cellBox
 
