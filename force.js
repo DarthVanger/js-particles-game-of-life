@@ -35,7 +35,7 @@ function getForceBetweenParticles(p1, p2) {
   const force = { x: 0, y: 0 }
 
   const forceMatrix = [
-    [-1.5, -0.5, 0],
+    [-1.5, -0.5, 0.5],
     [0, 0, 0],
     [0, 1, 0],
   ]
