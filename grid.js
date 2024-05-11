@@ -1,10 +1,14 @@
 import { canvas } from './canvas.js'
 import { universalPushForceRange, colorForceRange, particleRadius } from './gameConstants.js'
 
-const cellWidth = colorForceRange
-const cellHeight = colorForceRange
-const numRows = Math.ceil(canvas.height / cellHeight) + 2
-const numCols = Math.ceil(canvas.width / cellWidth) + 2
+let cellWidth = colorForceRange
+let cellHeight = colorForceRange
+const numRows = Math.ceil(canvas.height / cellHeight)
+const numCols = Math.ceil(canvas.width / cellWidth)
+cellWidth += canvas.width % colorForceRange / numCols
+canvas.width = cellWidth * (numCols - 1)
+cellHeight += canvas.height % colorForceRange / numCols
+canvas.height = cellHeight * (numRows - 1)
 
 const cells = createCells()
 
@@ -47,13 +51,12 @@ export const getParticlesInRange = (particle) => {
   let particles = []
   const { i, j } = getParticleGridPosition(particle)
 
-  particles = particles.concat(cells[i][j].particles.filter(p => p.id !== particle.id))
-
   const topIndex = i - 1 > 0 ? i - 1 : numRows - 1
   const leftIndex = j - 1 > 0 ? j - 1 : numCols - 1
-  const bottomIndex = i + 1 > numRows - 1 ? 0 : i + 1
-  const rightIndex = j + 1 > numCols - 1 ? 0 : j + 1
+  const bottomIndex = i + 1 < numRows - 1 ? i + 1 : 0
+  const rightIndex = j + 1 < numCols - 1 ? j + 1 : 0
 
+  particles = particles.concat(cells[i][j].particles.filter(p => p.id !== particle.id))
   particles = particles.concat(cells[topIndex][j].particles)
   particles = particles.concat(cells[bottomIndex][j].particles)
   particles = particles.concat(cells[i][leftIndex].particles)

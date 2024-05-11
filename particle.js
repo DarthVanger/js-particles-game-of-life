@@ -64,16 +64,16 @@ export function renderParticles() {
 
 function teleportOnEdges(particle) {
   const r = particle.r
-  if (particle.x + r < 0) {
+  if (particle.x < 0) {
     particle.x = canvas.width + particle.x
   }
-  if (canvas.width - particle.x + r < 0) {
+  if (canvas.width - particle.x < 0) {
     particle.x = particle.x - canvas.width
   }
-  if (particle.y + r < 0) {
+  if (particle.y < 0) {
     particle.y = canvas.height + particle.y
   }
-  if (canvas.height - particle.y + r < 0) {
+  if (canvas.height - particle.y < 0) {
     particle.y = particle.y - canvas.height
   }
 }
