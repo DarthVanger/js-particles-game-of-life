@@ -10,6 +10,7 @@ export function applyForce() {
     const particlesInRange = getParticlesInRange(particles[i])
     for (let j = 0; j < particlesInRange.length; j++) {
       applyParticleForce(particles[i], particlesInRange[j])
+      limitSpeed(particlesInRange[j])
     }
   }
 }
@@ -76,4 +77,23 @@ function getForceBetweenParticles(p1, p2) {
   }
 
   return force
+}
+
+/**
+ * Limit speed so that particles can't travel more than half screen in 1 fps.
+ * Otherwise it causes issues with teleportation on edges and grid.
+ */
+function limitSpeed(particle) {
+    if (particle.vx > canvas.width / 2) {
+      particle.vx = canvas.width / 2
+    }
+    if (particle.vy > canvas.height / 2) {
+      particle.vy = canvas.height / 2
+    }
+    if (particle.vx < -canvas.width / 2) {
+      particle.vx = -canvas.width / 2
+    }
+    if (particle.vy < -canvas.height / 2) {
+      particle.vy = -canvas.height / 2
+    }
 }
