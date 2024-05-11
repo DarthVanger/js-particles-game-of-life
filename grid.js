@@ -1,8 +1,9 @@
 import { canvas } from './canvas.js'
 import { universalPushForceRange, colorForceRange, particleRadius } from './gameConstants.js'
 
-const numRows = 10
-const numCols = 10
+const numRows = Math.ceil(canvas.height / colorForceRange)
+const numCols = Math.ceil(canvas.width / colorForceRange)
+
 const cellHeight = canvas.height / numRows
 const cellWidth = canvas.width / numCols
 
