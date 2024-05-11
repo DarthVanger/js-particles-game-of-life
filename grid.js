@@ -50,10 +50,10 @@ export const getParticlesInRange = (particle) => {
   //console.debug(`[getParticlesInRange] particle`, particle)
   //console.debug(`[getParticlesInRange] particle cell: ${i}, ${j}`)
 
-  const topIndex = i - 1 > 0 ? i - 1 : numRows - 1
-  const leftIndex = j - 1 > 0 ? j - 1 : numCols - 1
-  const bottomIndex = i + 1 < numRows - 1 ? i + 1 : 0
-  const rightIndex = j + 1 < numCols - 1 ? j + 1 : 0
+  const topIndex = i - 1 >= 0 ? i - 1 : numRows - 1
+  const leftIndex = j - 1 >= 0 ? j - 1 : numCols - 1
+  const bottomIndex = i + 1 <= numRows - 1 ? i + 1 : 0
+  const rightIndex = j + 1 <= numCols - 1 ? j + 1 : 0
 
   //console.debug(`[getParticlesInRange] neighbor cell indexes:
   //  topIndex: ${topIndex}; leftIndex: ${leftIndex};
